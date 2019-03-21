@@ -1,0 +1,73 @@
+<div class="sleeping">
+	<p>現在時刻</p>
+	<div class="clock">
+		<span id="view_clock1"></span>
+		<br>
+		<span id="view_clock2"></span>
+	</div>
+	<div class="alarm-sleeping">
+		<p>設定されたアラーム　
+			<%=@alarm.hour%>:<%if @alarm.minute<10 then%>0<%=@alarm.minute%><%else%><%=@alarm.minute%><%end%>
+			<%if @alarm.ampm == "1" then%>
+				A.M.
+			<%else%>
+				P.M.
+			<%end%>
+		</p>
+	</div>
+	<div class="cancel">
+		<%=link_to("アラームを中止", "/home/setting", {:class => 'cancel-button'})%>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+	<script type="text/javascript">
+		clock();
+		timerID = setInterval('clock()',500); //0.5秒毎にclock()を
+
+		function clock() {
+			<%checkAlarm%>
+			document.getElementById("view_clock1").innerHTML = getNow1();
+			document.getElementById("view_clock2").innerHTML = getNow2();
+		}
+
+		function getNow1() {
+			var now = new Date();
+			var mon = now.getMonth()+1; //１を足すこと
+			var day = now.getDate();
+			var you = now.getDay(); //曜日(0～6=日～土)
+			//曜日の選択肢
+			var youbi = new Array("日","月","火","水","木","金","土");
+			//出力用
+			var s = mon + "月" + day + "日 (" + youbi[you] + ")";
+			return s;
+		}
+
+		function getNow2() {
+			var now = new Date();
+			var hour = now.getHours();
+			var ampm;
+			if (hour>=12) {
+				hour-=12;
+				ampm = "P.M.";
+			} else {
+				ampm = "A.M.";
+			}
+			var min = now.getMinutes();
+
+			//出力用
+			if(min>=10) {
+				var s = hour + ":" + min + " " + ampm;
+			} else {
+				var s = hour + ":" + "0" + min + " " + ampm;
+			}
+			return s;
+		}
+
+	</script>
